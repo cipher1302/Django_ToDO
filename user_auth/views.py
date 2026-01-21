@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from django.contrib.auth.models import AnonymousUser
 # Create your views here.
    
 class RegisterView(generics.CreateAPIView):
@@ -27,5 +28,26 @@ class LogoutView(APIView):
             return Response({"message":"Logged out successfully"})          
         except Exception:
             return Response({"message":"Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+        
+class MeView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self,request):
+        user = request.user
+        if isinstance(user,AnonymousUser):
+            return Response({
+                "message":"You need to log in",
+                "user":[
+                {"id":None,
+                "username":"Anonymous",
+                "email":None}
+                ]
+            },status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({
+            "id":user.id,
+            "username":user.username,
+            "email":user.email,
+        }, status=status.HTTP_200_OK)
             
         

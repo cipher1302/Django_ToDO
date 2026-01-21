@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from task.views import TaskViewSet
-from user_auth.views import  RegisterView, LoginView, LogoutView
+from user_auth.views import  RegisterView, LoginView, LogoutView, MeView
 from rest_framework import routers
 from django.urls import include
 from rest_framework_simplejwt.views import (
@@ -36,5 +36,8 @@ urlpatterns = [
     path('api/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/register/',RegisterView.as_view(),name='api_register'),
     path('api/login/', LoginView.as_view(),name='api_login'),
-    path('api/logout/', LogoutView.as_view(),name='api_logout')
+    path('api/logout/', LogoutView.as_view(),name='api_logout'),
+    
+    # Me route
+    path('api/me/',MeView.as_view(),name='api_me')
 ]
